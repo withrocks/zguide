@@ -23,7 +23,7 @@ while True:
     log("Received request: %s" % message)
 
     #  Do some 'work'
-    time.sleep(0.5)
+    time.sleep(0.2)
 
     #  Send reply back to client
     socket.send(b"World")

@@ -7,6 +7,7 @@
 import zmq
 import codecs
 import sys
+import os
 
 context = zmq.Context()
 
@@ -30,4 +31,4 @@ for request in range(5):
     response = socket.recv()
     log(">Received reply %s [ %s ]" % (request, response))
     message = codecs.decode(request + b" " + response, "utf-8")
-    print(message)
+    print("{} from {}".format(message, os.getpid()))
