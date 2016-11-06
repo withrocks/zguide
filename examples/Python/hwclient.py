@@ -5,19 +5,29 @@
 #
 
 import zmq
+import codecs
+import sys
 
 context = zmq.Context()
 
+should_log = bool(sys.argv[1]) if len(sys.argv) > 1 else False
+def log(msg):
+    if should_log:
+        print(msg)
+
+log(">Connecting to hello world server...")
+
 #  Socket to talk to server
-print("Connecting to hello world server...")
 socket = context.socket(zmq.REQ)
 socket.connect("tcp://localhost:5555")
 
-#  Do 10 requests, waiting each time for a response
-for request in range(10):
-    print("Sending request %s ..." % request)
-    socket.send(b"Hello")
+for request in range(5):
+    log(">Sending request %s ..." % request)
+    request = b"Hello"
+    socket.send(request)
 
     #  Get the reply.
-    message = socket.recv()
-    print("Received reply %s [ %s ]" % (request, message))
+    response = socket.recv()
+    log(">Received reply %s [ %s ]" % (request, response))
+    message = codecs.decode(request + b" " + response, "utf-8")
+    print(message)

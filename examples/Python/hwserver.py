@@ -6,6 +6,12 @@
 
 import time
 import zmq
+import sys
+
+should_log = bool(sys.argv[1]) if len(sys.argv) > 1 else False
+def log(msg):
+    if should_log:
+        print(msg)
 
 context = zmq.Context()
 socket = context.socket(zmq.REP)
@@ -14,10 +20,10 @@ socket.bind("tcp://*:5555")
 while True:
     #  Wait for next request from client
     message = socket.recv()
-    print("Received request: %s" % message)
+    log("Received request: %s" % message)
 
     #  Do some 'work'
-    time.sleep(1)
+    time.sleep(0.5)
 
     #  Send reply back to client
     socket.send(b"World")
